@@ -7,7 +7,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix
 
 # Load Dataset
-df = pd.read_csv("creditcard.csv")
+df = pd.read_csv("creditcard_10MB.csv")
 
 # Display First 5 Rows
 print("First 5 Rows:")
@@ -17,7 +17,7 @@ print(df.head())
 print("\nDataset Shape:")
 print(df.shape)
 
-# Missing Values
+# Check Missing Values
 print("\nMissing Values:")
 print(df.isnull().sum())
 
@@ -25,12 +25,13 @@ print(df.isnull().sum())
 print("\nClass Distribution:")
 print(df["Class"].value_counts())
 
-# Visualization 1: Fraud vs Normal Transactions
+# Graph 1: Fraud vs Normal Transactions
 sns.countplot(x="Class", data=df)
 plt.title("Fraud vs Normal Transactions")
 plt.show()
 
-# Visualization 2: Transaction Amount Distribution
+# Graph 2: Transaction Amount Distribution
+plt.figure(figsize=(8, 5))
 plt.hist(df["Amount"], bins=50)
 plt.title("Transaction Amount Distribution")
 plt.xlabel("Amount")
@@ -41,20 +42,21 @@ plt.show()
 X = df.drop("Class", axis=1)
 y = df["Class"]
 
-# Split Dataset
+# Split Data into Training and Testing
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
-# Train Random Forest Model
+# Create Model
 model = RandomForestClassifier(
     n_estimators=100,
     random_state=42
 )
 
+# Train Model
 model.fit(X_train, y_train)
 
-# Prediction
+# Predict
 y_pred = model.predict(X_test)
 
 # Accuracy
@@ -69,13 +71,14 @@ cm = confusion_matrix(y_test, y_pred)
 print("\nConfusion Matrix:")
 print(cm)
 
-# Confusion Matrix Visualization
+# Heatmap
+plt.figure(figsize=(6, 4))
 sns.heatmap(cm, annot=True, fmt="d", cmap="Blues")
 plt.title("Confusion Matrix")
 plt.xlabel("Predicted")
 plt.ylabel("Actual")
 plt.show()
 
-# Conclusion
+# Final Message
 print("\nPROJECT COMPLETED SUCCESSFULLY")
 print("Credit Card Fraud Detection performed using Random Forest.")
